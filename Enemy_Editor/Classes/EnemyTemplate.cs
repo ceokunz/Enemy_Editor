@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Enemy_Editor.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Enemy_Editor.Classes
 {
-    public class EnemyTemplate
+    public class EnemyTemplate : IEnemyTemplateList
     {
         public string Name
         {
@@ -63,5 +64,10 @@ namespace Enemy_Editor.Classes
         double goldModifier;
         //Шанс на появление
         double spawnChance;
+
+        public void SaveToJson()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
