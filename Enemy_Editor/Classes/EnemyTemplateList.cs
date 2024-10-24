@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Enemy_Editor.Classes
 {
@@ -102,9 +103,6 @@ namespace Enemy_Editor.Classes
         public void LoadFromJson()
         {
 
-            
-
-
             string jsonFromFile = File.ReadAllText("EnemysList.json");
 
             ObservableCollection<EnemyTemplate> _e = JsonSerializer.Deserialize<ObservableCollection<EnemyTemplate>>(jsonFromFile);
@@ -114,26 +112,15 @@ namespace Enemy_Editor.Classes
                 AddEnemy(_enemy);   
             }
 
-            // Парсинг JSON
-            //JsonDocument doc = JsonDocument.Parse(jsonFromFile);
-            ////Добавление новой записи в список класса из json
-            //foreach (JsonElement element in doc.RootElement.EnumerateArray())
-            //{
-            //    int age = element.GetProperty("age").GetInt32();
-            //    string firstName = element.GetProperty("first_name").GetString();
-            //    string secondName = element.GetProperty("second_name").GetString();
-            //    double height = element.GetProperty("height").GetDouble();
-            //    // Создание нового экземпляра класса Person с помощью конструктора
-            //    Person person = new Person(age, firstName, secondName, height);
-            //    // Добавление объекта в список
-            //    people.Add(person);
-            //}
-            //// Вывод данных на экран
-            //foreach (var person in people)
-            //{
-            //    Console.WriteLine($"Age: {person.Age()}, Name: {person.FirstName()}
-            //{ person.SecondName()}, Height: { person.Height()}
-            //");
+        }
+
+        public void SaveToXml()
+        {
+            var serializer = new XmlSerializer(typeof(EnemyTemplate));
+            using (var writer = new StreamWriter("character.xml"))
+            {
+                serializer.Serialize(writer, Enemies);
+            }
         }
 
         

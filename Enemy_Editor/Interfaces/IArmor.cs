@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Enemy_Editor.Interfaces
 {
-    interface IEnemyTemplateList
+    public interface IArmor
     {
-        void SaveToJson();
+        public string Name { get; set; }
+        public int Armor { get; set; }
     }
 }

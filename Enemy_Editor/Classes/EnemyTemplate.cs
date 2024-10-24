@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Enemy_Editor.Interfaces;
 
 namespace Enemy_Editor.Classes
 {
@@ -17,7 +18,20 @@ namespace Enemy_Editor.Classes
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private IArmor _armor;
 
+        [JsonInclude]
+        public IArmor Armor
+        {
+            get
+            {
+                return _armor;
+            }
+            set
+            {
+                _armor = value;
+            }
+        }
 
         [JsonInclude]
         public string Name

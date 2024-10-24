@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Enemy_Editor.Armors;
 using Enemy_Editor.Classes;
 using Microsoft.Win32;
 
@@ -65,7 +66,10 @@ namespace Enemy_Editor
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
-            EnemyList.AddEnemy(new EnemyTemplate());
+            EnemyTemplate a = new EnemyTemplate();
+            a.Armor = new LeatherArmor();
+
+            EnemyList.AddEnemy(a);
         }
 
         private void RemoveItem_Click(object sender, RoutedEventArgs e)
@@ -75,7 +79,7 @@ namespace Enemy_Editor
 
         private void SaveEnemies_OnClick(object sender, RoutedEventArgs e)
         {
-            EnemyList.SaveToJson();
+            EnemyList.SaveToXml();
         }
 
         public void LoadEnemies_OnClick(object sender, RoutedEventArgs e)
