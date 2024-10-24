@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -14,17 +15,27 @@ namespace Enemy_Editor.Classes
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+
+        protected void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+
         //Список противников из класса CEnemyTemplate
-        public List<EnemyTemplate> enemies { get; }
+        private ObservableCollection<EnemyTemplate> _enemies;
+        public ObservableCollection<EnemyTemplate> Enemies
+        {
+            get { return _enemies; }
+            set
+            {
+                _enemies = value;
+                //OnPropertyChanged(nameof(Enemies));
+            }
+        }
         public EnemyTemplateList()
         {
-            enemies = new List<EnemyTemplate>();
+            Enemies = new ObservableCollection<EnemyTemplate>();
         }
 
         public void AddEnemy(
@@ -37,47 +48,94 @@ namespace Enemy_Editor.Classes
             double spawnChance
             )
         {
-            enemies.Add(
+            _enemies.Add(
                 new EnemyTemplate(name,iconName, baseLife, lifeMod, baseGold, goldMod,spawnChance)
                 );
+
+            //OnPropertyChanged(nameof(Enemies));
         }
 
         public void AddEnemy(EnemyTemplate e)
         {
-            enemies.Add(e);
-            
+            _enemies.Add(e);
+            //OnPropertyChanged(nameof(Enemies));
+
         }
 
         public EnemyTemplate GetByName( string name ) 
         {
-            return (EnemyTemplate)enemies.Where(e => e.Name == name);
+            return (EnemyTemplate)_enemies.Where(e => e.Name == name);
         }
 
         public EnemyTemplate GetById (int id)
         {
-            return enemies.ElementAt(id);
+            return _enemies.ElementAt(id);
         }
 
         public void DeleteByName(string name )
         {
-            enemies.Remove((EnemyTemplate)enemies.Where(e => e.Name == name));
+            _enemies.Remove((EnemyTemplate)_enemies.FirstOrDefault(e => e.Name == name));
         }
 
         public void DeleteById(int id)
         {
-            enemies.RemoveAt(id);
+            _enemies.RemoveAt(id);
         }
 
         public List<string> GetNames()
         {
-            return enemies.Where(e => !string.IsNullOrEmpty(e.Name)).Select(e => e.Name).ToList();
+            return _enemies.Where(e => !string.IsNullOrEmpty(e.Name)).Select(e => e.Name).ToList();
         }
 
         public void SaveToJson()
         {
-            string jsonString = JsonSerializer.Serialize(enemies);
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,  // Включаем красивое форматирование
+            };
+
+            string jsonString = JsonSerializer.Serialize(_enemies, options);
             // Сохранение JSON в файл
             File.WriteAllText("EnemysList.json", jsonString);
         }
+
+        public void LoadFromJson()
+        {
+
+            
+
+
+            string jsonFromFile = File.ReadAllText("EnemysList.json");
+
+            ObservableCollection<EnemyTemplate> _e = JsonSerializer.Deserialize<ObservableCollection<EnemyTemplate>>(jsonFromFile);
+            
+            foreach (var _enemy in _e)
+            {
+                AddEnemy(_enemy);   
+            }
+
+            // Парсинг JSON
+            //JsonDocument doc = JsonDocument.Parse(jsonFromFile);
+            ////Добавление новой записи в список класса из json
+            //foreach (JsonElement element in doc.RootElement.EnumerateArray())
+            //{
+            //    int age = element.GetProperty("age").GetInt32();
+            //    string firstName = element.GetProperty("first_name").GetString();
+            //    string secondName = element.GetProperty("second_name").GetString();
+            //    double height = element.GetProperty("height").GetDouble();
+            //    // Создание нового экземпляра класса Person с помощью конструктора
+            //    Person person = new Person(age, firstName, secondName, height);
+            //    // Добавление объекта в список
+            //    people.Add(person);
+            //}
+            //// Вывод данных на экран
+            //foreach (var person in people)
+            //{
+            //    Console.WriteLine($"Age: {person.Age()}, Name: {person.FirstName()}
+            //{ person.SecondName()}, Height: { person.Height()}
+            //");
+        }
+
+        
     }
 }

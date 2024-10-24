@@ -41,19 +41,13 @@ namespace Enemy_Editor
             }
 
             IconListBox.ItemsSource = IconList;
-            EnemyList.AddEnemy("123","123",50,2,100,2,52);
 
-            EnemyListBox.ItemsSource = EnemyList.enemies;
-            EnemyListBox.DisplayMemberPath = "Name";
+            EnemyList.AddEnemy(new EnemyTemplate());
 
-            //EnemyList.AddEnemy("5552", "126215", 50, 2, 100, 2, 52);
+            DataContext = EnemyList;
 
-
-            CurrentEnemy = new EnemyTemplate();
-            GridWithData.DataContext = CurrentEnemy;
-
-            
-
+            //EnemyListBox.ItemsSource = EnemyList.Enemies;
+            //EnemyListBox.DisplayMemberPath = "Name";
         }
 
 
@@ -67,12 +61,55 @@ namespace Enemy_Editor
             }
         }
 
+        #region Menu Buttons
+
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
-            EnemyList.AddEnemy(CurrentEnemy);
-
-            CurrentEnemy = new EnemyTemplate();
+            EnemyList.AddEnemy(new EnemyTemplate());
         }
+
+        private void RemoveItem_Click(object sender, RoutedEventArgs e)
+        {
+            EnemyList.DeleteByName((EnemyListBox.SelectedItem as EnemyTemplate)?.Name);
+        }
+
+        private void SaveEnemies_OnClick(object sender, RoutedEventArgs e)
+        {
+            EnemyList.SaveToJson();
+        }
+
+        public void LoadEnemies_OnClick(object sender, RoutedEventArgs e)
+        {
+            EnemyList.LoadFromJson();
+        }
+        #endregion
+
+
+
+        private void IconListBox_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            (EnemyListBox.SelectedItem as EnemyTemplate)!.IconName = (IconListBox.Items.CurrentItem as IconItem)!.IconPath;
+        }
+
+        private void IconListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(IconListBox.SelectedItem!= null)
+                (EnemyListBox.SelectedItem as EnemyTemplate)!.IconName = (IconListBox.SelectedItem as IconItem)!.IconPath;
+        }
+
+        private void EnemyListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            IconListBox.SelectedItem = null; //TODO: Make it more nice
+        }
+
+        private void Element_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            //(sender as TextBox)?.SelectAll();
+            textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
+        }
+
+        
     }
 
     public class IconItem

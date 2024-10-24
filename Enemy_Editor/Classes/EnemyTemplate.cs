@@ -12,10 +12,9 @@ namespace Enemy_Editor.Classes
     public class EnemyTemplate : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        protected void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
@@ -35,7 +34,11 @@ namespace Enemy_Editor.Classes
         public string IconName
         {
             get => iconName;
-            set => iconName = value ?? throw new ArgumentNullException(nameof(value));
+            set
+            {
+                iconName = value ?? throw new ArgumentNullException(nameof(value));
+                OnPropertyChanged("IconName");
+            }
         }
 
         [JsonInclude]
@@ -89,7 +92,8 @@ namespace Enemy_Editor.Classes
 
         public EnemyTemplate()
         {
-            name = "";
+            name = "<Новый противник>";
+            iconName = "";
         }
 
         public EnemyTemplate(

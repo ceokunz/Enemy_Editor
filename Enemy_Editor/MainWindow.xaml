@@ -6,6 +6,13 @@
         xmlns:local="clr-namespace:Enemy_Editor"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <EventSetter Event="GotFocus" Handler="Element_OnGotFocus" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
         
 
@@ -22,19 +29,20 @@
 
             <Menu Height="20" VerticalAlignment="Top">
                 <MenuItem Header="File">
-                    <MenuItem Header="Load" />
-                    <MenuItem Header="Save"/>
+                <MenuItem Header="Load" Click="LoadEnemies_OnClick"/>
+                    <MenuItem Header="Save" Click="SaveEnemies_OnClick"/>
                 </MenuItem>
 
                 <MenuItem Header="Enemy">
                 <MenuItem Header="Add" Click="AddItem_Click"/>
-                    <MenuItem Header="Remove"/>
+                <MenuItem Header="Remove" Click="RemoveItem_Click"/>
                 </MenuItem>
             </Menu>
 
         <Grid Grid.Column="0" Grid.Row="1" Background="#FFCCFFD4" >
             <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" 
-                     ItemsSource="{Binding Path=Name}" Name="EnemyListBox"/>
+                     ItemsSource="{Binding Enemies}" DisplayMemberPath="Name" Name="EnemyListBox"
+                     SelectionChanged="EnemyListBox_OnSelectionChanged" />
         </Grid>
 
 
@@ -46,23 +54,25 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Background="White" >
                 <TextBlock Text="Enemy Icon" />
-                <Image Height="80" Width="80" VerticalAlignment="Top" HorizontalAlignment="Left" Source="{Binding ElementName=EnemyListBox, Path=SelectedItem.IconPath}"/>
+                <Image Height="80" Width="80" VerticalAlignment="Top" HorizontalAlignment="Left" Source="{Binding ElementName=EnemyListBox, Path=SelectedItem.IconName}"/>
 
                 <TextBlock Text="Base Life"/>
-                <TextBox x:Name="BaseLifeTextBox" Text="{Binding Path=BaseLife, Mode=TwoWay}"/>
-                <TextBlock Text="Life Modifier"/>
-                <TextBox x:Name="LifeModifierTextBox" Text="{Binding Path=LifeModifier, Mode=TwoWay}"/>
+                <TextBox x:Name="BaseLifeTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.BaseLife, Mode=TwoWay}" />
+                <TextBlock Text="Life Modifier" />
+                <TextBox x:Name="LifeModifierTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.LifeModifier, Mode=TwoWay}"/>
                 <TextBlock Text="Spawn Chance"/>
-                <TextBox x:Name="SpawnChanceTextBox" Text="{Binding Path=SpawnChance, Mode=TwoWay}"/>
+                <TextBox x:Name="SpawnChanceTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.SpawnChance, Mode=TwoWay}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1" Background="White" >
                 <TextBlock Text="Icon Name"/>
-                <TextBlock Background="#FFEAEAEA" Name="IconNameTextBox" Text="{Binding Path=IconName, Mode=TwoWay}"/>
+                <TextBlock Background="#FFEAEAEA" Name="IconNameTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.IconName, Mode=TwoWay}"/>
                 <TextBlock Text="Enemy Name"/>
-                <TextBox Name="EnemyNameTextBox" Text="{Binding Path=Name, Mode=TwoWay}"/>
+                <TextBox Name="EnemyNameTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.Name, Mode=TwoWay}"/>
                 <TextBlock Text="Base gold"/>
-                <TextBox Name="BaseGoldTextBox" Text="{Binding Path=BaseGold, Mode=TwoWay}"/>
+                <TextBox Name="BaseGoldTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.BaseGold, Mode=TwoWay}"/>
+                <TextBlock Text="Gold modifier"/>
+                <TextBox Name="GoldModifierTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.GoldModifier, Mode=TwoWay}"/>
             </StackPanel>
 
         </Grid>
@@ -70,7 +80,7 @@
         <Grid Column="2" Row="1" Margin="10">
 
             <Grid>
-                <ListBox Name="IconListBox" SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox Name="IconListBox" SelectionMode="Single" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="IconListBox_OnSelectionChanged">
                     <ListBox.ItemsPanel>
                         <!-- WrapPanel, чтобы иконки располагались в несколько рядов -->
                         <ItemsPanelTemplate>
@@ -81,7 +91,7 @@
                         <!-- Шаблон элемента, который отображает иконку -->
                         <DataTemplate>
                             <StackPanel>
-                                <Image Source="{Binding IconPath}" Width="50" Height="50" />
+                                <Image Source="{Binding IconPath}" Width="50" Height="50"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
