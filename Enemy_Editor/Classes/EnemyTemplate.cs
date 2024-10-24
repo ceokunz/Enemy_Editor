@@ -1,5 +1,4 @@
-﻿using Enemy_Editor.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -87,5 +86,29 @@ namespace Enemy_Editor.Classes
         double goldModifier;
         //Шанс на появление
         double spawnChance;
+
+        public EnemyTemplate()
+        {
+            name = "";
+        }
+
+        public EnemyTemplate(
+            string name,
+            string iconName,
+            int baseLife,
+            double lifeMod,
+            int baseGold,
+            double goldMod,
+            double spawnChance
+            )
+        {
+            this.name = name;
+            this.iconName = iconName;
+            this.baseLife = baseLife;
+            this.lifeModifier = lifeMod;
+            this.baseGold = baseGold;
+            this.goldModifier = goldMod;
+            this.spawnChance = spawnChance;
+        }
     }
 }
