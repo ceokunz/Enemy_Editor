@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Enemy_Editor.Interfaces;
+using Newtonsoft.Json;
 
 namespace Enemy_Editor.Classes
 {
@@ -20,7 +21,7 @@ namespace Enemy_Editor.Classes
 
         private IArmor _armor;
 
-        [JsonInclude]
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
         public IArmor Armor
         {
             get

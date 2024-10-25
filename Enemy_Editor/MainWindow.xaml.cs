@@ -79,7 +79,7 @@ namespace Enemy_Editor
 
         private void SaveEnemies_OnClick(object sender, RoutedEventArgs e)
         {
-            EnemyList.SaveToXml();
+            EnemyList.SaveToJson();
         }
 
         public void LoadEnemies_OnClick(object sender, RoutedEventArgs e)
