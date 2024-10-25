@@ -66,6 +66,8 @@ namespace Enemy_Editor
 
             EnemyList.AddEnemy(new EnemyTemplate());
 
+
+
             //EnemyListBox.ItemsSource = EnemyList.Enemies;
             //EnemyListBox.DisplayMemberPath = "Name";
 
@@ -194,7 +196,15 @@ namespace Enemy_Editor
             return types;
         }
 
-        
+
+        private async void GenerateEnemyByAi_Click(object sender, RoutedEventArgs e)
+        {
+
+            AIEnemyGenerator enemyGenerator = new();
+            var v = await enemyGenerator.GetOllamaResponseAsync("", "gemma2");
+
+            MessageBox.Show(v);
+        }
     }
 
     public class IconItem

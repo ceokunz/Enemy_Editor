@@ -36,6 +36,7 @@
                 <MenuItem Header="Enemy">
                 <MenuItem Header="Add" Click="AddItem_Click"/>
                 <MenuItem Header="Remove" Click="RemoveItem_Click"/>
+                <MenuItem Header="AI" Click="GenerateEnemyByAi_Click"/>
                 </MenuItem>
             </Menu>
 
