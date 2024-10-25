@@ -10,5 +10,6 @@ namespace Enemy_Editor.Interfaces
     {
         public string Name { get; set; }
         public int Armor { get; set; }
+
     }
 }

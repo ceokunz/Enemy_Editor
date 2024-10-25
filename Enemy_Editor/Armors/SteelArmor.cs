@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Enemy_Editor.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Enemy_Editor.Interfaces;
 
 namespace Enemy_Editor.Armors
 {
-    class LeatherArmor : IArmor
+    public class SteelArmor : IArmor
     {
         public string Name { get; set; }
         public int Armor { get; set; }
 
-        public LeatherArmor()
+        public SteelArmor()
         {
-            Name = "Кожак";
-            Armor = 15;
+            Name = "Стальная жопа";
+            Armor = 50;
         }
     }
 }

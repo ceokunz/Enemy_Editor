@@ -125,6 +125,7 @@ namespace Enemy_Editor.Classes
 
             foreach (var _enemy in _e)
             {
+
                 AddEnemy(_enemy);
             }
         }

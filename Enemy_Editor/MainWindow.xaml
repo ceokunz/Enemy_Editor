@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Enemy_Editor"
+        xmlns:local="clr-namespace:Enemy_Editor" xmlns:component="clr-namespace:Enemy_Editor.Component"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -62,6 +62,12 @@
                 <TextBox x:Name="LifeModifierTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.LifeModifier, Mode=TwoWay}"/>
                 <TextBlock Text="Spawn Chance"/>
                 <TextBox x:Name="SpawnChanceTextBox" Text="{Binding ElementName=EnemyListBox, Path=SelectedItem.SpawnChance, Mode=TwoWay}"/>
+
+                <ComboBox Name="ArmorTypeComboBox"
+                          DisplayMemberPath="Name"
+                          SelectionChanged="ArmorTypeComboBox_SelectionChanged"
+                          />
+
             </StackPanel>
 
             <StackPanel Grid.Column="1" Background="White" >

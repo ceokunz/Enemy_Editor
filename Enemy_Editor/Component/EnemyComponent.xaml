@@ -7,8 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="200">
     <Grid>
-        
-        
+
+        <StackPanel>
+            <ProgressBar x:Name="HealtBar" Height="20"/>
+            <Image Name="Icon" Height="150" Width="150"/>
+            <TextBlock x:Name="EnemyName" Height="30"/>
+        </StackPanel>
             
     </Grid>
 </UserControl>

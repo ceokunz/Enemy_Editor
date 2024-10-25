@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Enemy_Editor.Armors;
 using Enemy_Editor.Classes;
+using Enemy_Editor.Interfaces;
 using Microsoft.Win32;
 
 namespace Enemy_Editor
@@ -24,6 +27,7 @@ namespace Enemy_Editor
         public List<IconItem> IconList { get; set; }
         public EnemyTemplateList EnemyList { get; set; }    
         public EnemyTemplate CurrentEnemy { get; set; }
+        public List<IArmor> ArmorTypes { get; set; }
 
         public MainWindow()
         {
@@ -33,6 +37,7 @@ namespace Enemy_Editor
 
             IconList = new List<IconItem>();
             EnemyList = new EnemyTemplateList();
+            ArmorTypes = new List<IArmor>();
 
             OpenFolderDialog choofdlog = new OpenFolderDialog();
 
@@ -43,12 +48,26 @@ namespace Enemy_Editor
 
             IconListBox.ItemsSource = IconList;
 
-            EnemyList.AddEnemy(new EnemyTemplate());
+            EnemyList.AddEnemy(new EnemyTemplate { Armor = new NoArmor()});
 
             DataContext = EnemyList;
 
+            Type[] types = GetClassesInNamespace("Enemy_Editor.Armors");
+
+            foreach(Type t in types)
+            {
+                ArmorTypes.Add((IArmor)CreateInstance("Enemy_Editor.Armors", t.Name));
+            }
+
+            ArmorTypeComboBox.ItemsSource = ArmorTypes;
+            ArmorTypeComboBox.DisplayMemberPath = "Name";
+
+            ArmorTypeComboBox.SelectedIndex = 0;
+
             //EnemyListBox.ItemsSource = EnemyList.Enemies;
             //EnemyListBox.DisplayMemberPath = "Name";
+
+
         }
 
 
@@ -67,7 +86,7 @@ namespace Enemy_Editor
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
             EnemyTemplate a = new EnemyTemplate();
-            a.Armor = new LeatherArmor();
+            a.Armor = new NoArmor();
 
             EnemyList.AddEnemy(a);
         }
@@ -104,6 +123,31 @@ namespace Enemy_Editor
         private void EnemyListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             IconListBox.SelectedItem = null; //TODO: Make it more nice
+
+            //var t = GetType((EnemyListBox.SelectedItem as EnemyTemplate).Armor;
+
+            if (EnemyListBox.SelectedItem != null)
+            {
+                foreach (IArmor arm in ArmorTypeComboBox.Items)
+                {
+                    if((EnemyListBox.SelectedItem as EnemyTemplate).Armor.GetType() == arm.GetType())
+                    {
+                        ArmorTypeComboBox.SelectedIndex = ArmorTypeComboBox.Items.IndexOf(arm);
+                    }
+                }
+                
+                    
+                    //((EnemyListBox.SelectedItem as EnemyTemplate).Armor);
+            }
+                
+        }
+
+        private void ArmorTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ArmorTypeComboBox.SelectedItem != null && EnemyListBox.SelectedItem != null)
+            {
+                (EnemyListBox.SelectedItem as EnemyTemplate)!.Armor = (IArmor)ArmorTypeComboBox.SelectedItem;
+            }
         }
 
         private void Element_OnGotFocus(object sender, RoutedEventArgs e)
@@ -111,6 +155,41 @@ namespace Enemy_Editor
             TextBox textBox = sender as TextBox;
             //(sender as TextBox)?.SelectAll();
             textBox.Dispatcher.BeginInvoke(new Action(() => textBox.SelectAll()));
+        }
+
+        //Собиратель классов
+        public static object CreateInstance(string namespaceName, string className)
+        {
+            // Получаем сборку, где находится класс (обычно это текущая сборка)
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            // Полное имя типа
+            string fullTypeName = $"{namespaceName}.{className}";
+
+            // Получаем Type для класса
+            Type type = assembly.GetType(fullTypeName);
+            if (type == null)
+            {
+                throw new ArgumentException($"Класс с именем {fullTypeName} не найден в сборке.");
+            }
+
+            // Создаем экземпляр типа
+            return Activator.CreateInstance(type);
+        }
+
+        public Type[] GetClassesInNamespace(string namespaceName)
+        {
+            // Получаем текущую сборку (или можно указать другую сборку, если нужно)
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            // Находим все классы в указанном пространстве имен
+            var types = assembly.GetTypes()
+                                .Where(t => t.IsClass &&
+                                            t.Namespace == namespaceName &&
+                                            !t.IsAbstract)  // Исключаем абстрактные классы
+                                .ToArray();
+
+            return types;
         }
 
         
