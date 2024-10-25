@@ -64,6 +64,8 @@ namespace Enemy_Editor
 
             ArmorTypeComboBox.SelectedIndex = 0;
 
+            EnemyList.AddEnemy(new EnemyTemplate());
+
             //EnemyListBox.ItemsSource = EnemyList.Enemies;
             //EnemyListBox.DisplayMemberPath = "Name";
 
@@ -130,7 +132,7 @@ namespace Enemy_Editor
             {
                 foreach (IArmor arm in ArmorTypeComboBox.Items)
                 {
-                    if((EnemyListBox.SelectedItem as EnemyTemplate).Armor.GetType() == arm.GetType())
+                    if((EnemyListBox.SelectedItem as EnemyTemplate).Armor?.GetType() == arm.GetType())
                     {
                         ArmorTypeComboBox.SelectedIndex = ArmorTypeComboBox.Items.IndexOf(arm);
                     }
