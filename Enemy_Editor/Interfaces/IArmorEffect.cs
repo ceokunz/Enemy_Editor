@@ -8,6 +8,6 @@ namespace Enemy_Editor.Interfaces
 {
     public interface IArmorEffect
     {
-        public delegate 
+         
     }
 }

@@ -11,6 +11,8 @@ namespace Enemy_Editor.Armors
     {
         public string Name { get; set; }
         public int Armor { get; set; }
+        public bool IsEnchanted { get; set; }
+
 
         public NoArmor()
         {
