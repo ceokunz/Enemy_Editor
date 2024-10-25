@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace Enemy_Editor.Interfaces
 {
-    public interface IArmor
+    public interface IArmorEffect
     {
-        public string Name { get; set; }
-        public int Armor { get; set; }
-        public bool IsEnchanted { get; set; }
-        
-
+        public delegate 
     }
 }
