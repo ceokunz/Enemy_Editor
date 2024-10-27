@@ -201,9 +201,15 @@ namespace Enemy_Editor
         {
 
             AIEnemyGenerator enemyGenerator = new();
-            var v = await enemyGenerator.GetOllamaResponseAsync("", "gemma2");
 
-            MessageBox.Show(v);
+            var v = await enemyGenerator.GenerateEnemy();
+
+            EnemyList.AddEnemy(v);
+
+            //var v = await enemyGenerator.GetOllamaResponseAsync("", "gemma2");
+            //var z = await enemyGenerator.GetIconOfEnemy("Some icon of enemy, flat, icon");
+
+            //MessageBox.Show(z);
         }
     }
 

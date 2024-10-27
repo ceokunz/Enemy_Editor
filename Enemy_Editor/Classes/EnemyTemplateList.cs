@@ -66,6 +66,12 @@ namespace Enemy_Editor.Classes
 
         }
 
+        public void AddEnemy(string jsonString)
+        {
+            _enemies.Add(JsonConvert.DeserializeObject<EnemyTemplate>(jsonString));
+
+        }
+
         public EnemyTemplate GetByName(string name)
         {
             return (EnemyTemplate)_enemies.Where(e => e.Name == name);
