@@ -97,9 +97,9 @@
                     <ListBox.ItemTemplate>
                         <!-- Шаблон элемента, который отображает иконку -->
                         <DataTemplate>
-                            <StackPanel>
+                            <!--<StackPanel>-->
                                 <Image Source="{Binding IconPath}" Width="50" Height="50"/>
-                            </StackPanel>
+                            <!--</StackPanel>-->
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

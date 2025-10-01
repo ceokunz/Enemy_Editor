@@ -33,7 +33,8 @@ namespace Enemy_Editor
         {
             InitializeComponent();
 
-            this.DataContext = this;
+            this.DataContext = this; //TODO: zhopa404
+            //TODO: BBBB
 
             IconList = new List<IconItem>();
             EnemyList = new EnemyTemplateList();
